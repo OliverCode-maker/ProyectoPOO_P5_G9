@@ -1,0 +1,10 @@
+1,jorge_perez,p4ssw0rd123
+2,ana_lopez,s3gura2025
+3,carlos_rodriguez,C@rlosR0d
+4,sofia_gonzalez,s0f1a_2024
+5,luis_martinez,lu1sm4rt!nz
+6,maria_garcia,mar1aG@rc1a
+7,fernando_diaz,f3rn4nd0D!az
+8,laura_sanchez,L@ur4S4nch3z
+9,diego_torres,d13g0t0rr3s
+10,paula_ramirez,p4ul4R@m!r3z

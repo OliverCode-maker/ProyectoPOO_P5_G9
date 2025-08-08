@@ -1,5 +1,6 @@
 package com.example.comunicadosespol;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,12 +27,15 @@ public class AdminComActivity extends AppCompatActivity {
         });
     }
     public void verCom(View view){
-
+        Intent intent= new Intent(AdminComActivity.this, VerComunicadosActivity.class);
+        startActivity(intent);
     }
     public void publCom(View view){
-
+        Intent intent= new Intent(AdminComActivity.this, PublComunicadosActivity.class);
+        startActivity(intent);
     }
     public void miCom(View view){
-
+        Intent intent= new Intent(AdminComActivity.this, MisComunicadosActivity.class);
+        startActivity(intent);
     }
 }

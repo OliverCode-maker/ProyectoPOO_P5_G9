@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editUser;
     private EditText editPass;
     private Button btnSesion;
-    private static ArrayList<Usuario> usuarios;
+    private static ArrayList<Usuario> usuarios=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
             Toast.makeText(this,"Error al cargar usuarios...",Toast.LENGTH_SHORT).show();
         }
 

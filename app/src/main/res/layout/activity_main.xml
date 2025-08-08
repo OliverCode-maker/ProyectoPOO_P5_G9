@@ -44,7 +44,7 @@
             android:ems="10"
             android:hint="user123@espol.edu.ec"
             android:inputType="text"
-            android:text="Name" />
+            android:text="user" />
 
         <TextView
             android:id="@+id/textView3"
@@ -55,9 +55,10 @@
         <EditText
             android:id="@+id/editTextPass"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="62dp"
             android:ems="10"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:text="pasword" />
 
         <Button
             android:id="@+id/btnlogin"

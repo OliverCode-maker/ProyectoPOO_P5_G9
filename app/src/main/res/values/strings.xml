@@ -5,5 +5,7 @@
     <string name="mis_comunicados">Mis Comunicados</string>
     <string name="saludo" formatted="true">Bienvenido, %1$s</string>
     <string name="opciones">Opciones</string>
+    <string name="imagen_comunicado">Opciones</string>
+    <string name="volver">Volver</string>
 
 </resources>

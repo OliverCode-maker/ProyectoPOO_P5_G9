@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">ComunicadosESPOL</string>
+    <string name="ver_comunicados">Ver Comunicados</string>
+    <string name="publicar_comunicados">Publicar Comunicados</string>
+    <string name="mis_comunicados">Mis Comunicados</string>
+    <string name="saludo" formatted="true">Bienvenido, %1$s</string>
+    <string name="opciones">Opciones</string>
 
 </resources>

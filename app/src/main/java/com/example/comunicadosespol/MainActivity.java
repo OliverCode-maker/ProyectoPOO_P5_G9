@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSesion;
     private static ArrayList<Usuario> usuarios=new ArrayList<>();
 
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_USER_ID  = "userId";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Usuario u = autenticar(username, password); // puede lanzar la excepción verificada
                 Intent intent = new Intent(MainActivity.this, AdminComActivity.class);
-                //Agregar id del usuario para trackearlo en la siguiente vista
-                intent.putExtra("userId", u.getIdUser());
+                //Para usar username en siguientes vistas
+                intent.putExtra(KEY_USERNAME, u.getUsername());
+                //Para usar id en siguientes vistas
+                intent.putExtra(KEY_USER_ID,  u.getIdUser());
                 startActivity(intent);
                 finish();
             } catch(CredencialesInvalidasException e){

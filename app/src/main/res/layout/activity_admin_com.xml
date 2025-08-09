@@ -22,25 +22,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/txtSaludo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/saludo"
+            android:textSize="18sp"
+            android:paddingBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/txtOpciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/opciones"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingBottom="16dp"/>
+
         <Button
             android:id="@+id/btnVerComunicados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="verCom"
-            android:text="Ver Comunicados" />
+            android:text="@string/ver_comunicados" />
 
         <Button
             android:id="@+id/btnPublicarCom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="publCom"
-            android:text="Publicar Comunicados" />
+            android:text="@string/publicar_comunicados" />
 
         <Button
             android:id="@+id/btnMisComunicados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="miCom"
-            android:text="Mis Comunicados" />
+            android:text="@string/mis_comunicados" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

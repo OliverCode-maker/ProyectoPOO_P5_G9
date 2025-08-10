@@ -8,4 +8,51 @@
     <string name="imagen_comunicado">Opciones</string>
     <string name="volver">Volver</string>
 
+    <!-- Títulos y etiquetas para publicarAnuncio -->
+    <string name="titulo_nuevo_comunicado">Nuevo Comunicado</string>
+    <string name="etiqueta_tipo">Tipo:</string>
+    <string name="tipo_anuncio">Anuncio</string>
+    <string name="tipo_evento">Evento</string>
+    <string name="etiqueta_area">Área</string>
+    <string name="etiqueta_audiencia">Audiencia</string>
+    <string name="audiencia_estudiantes">Estudiantes</string>
+    <string name="audiencia_profesores">Profesores</string>
+    <string name="audiencia_administrativo">Administrativo</string>
+    <string name="hint_titulo">Título</string>
+    <string name="hint_descripcion">Descripción</string>
+    <string name="hint_lugar">Lugar</string>
+    <string name="hint_fecha">Fecha (dd/MM/yyyy)</string>
+    <string name="etiqueta_urgencia">Nivel de urgencia</string>
+
+    <!-- Botones -->
+    <string name="btn_adjuntar_imagen">Adjuntar imagen</string>
+    <string name="btn_publicar">Publicar</string>
+    <string name="btn_volver">Volver</string>
+
+    <!-- Áreas -->
+    <string name="area_academico">Académico</string>
+    <string name="area_educativo">Educativo</string>
+    <string name="area_investigacion">Investigación</string>
+    <string name="area_vinculacion">Vinculación</string>
+    <string name="area_capacitacion">Capacitación</string>
+    <string name="area_deportes">Deportes</string>
+    <string name="area_cultura">Cultura</string>
+    <string name="area_servicios">Servicios/Productos</string>
+
+    <!-- Urgencia -->
+    <string name="urgencia_alta">Alta</string>
+    <string name="urgencia_media">Media</string>
+    <string name="urgencia_baja">Baja</string>
+
+    <!-- Mensajes -->
+    <string name="msg_img_no_seleccionada">Seleccione una imagen primero</string>
+    <string name="msg_img_guardada">Imagen guardada</string>
+    <string name="msg_publicado_ok">Comunicado publicado</string>
+    <string name="msg_datos_incompletos">No están todos los datos completos</string>
+    <string name="msg_faltan_evento">Faltan datos del evento (lugar/fecha)</string>
+    <string name="msg_falta_urgencia">Falta seleccionar nivel de urgencia</string>
+    <string name="msg_falta_audiencia">Seleccione la audiencia</string>
+    <string name="msg_error_guardar">Error al guardar</string>
+    <string name="imagen_previa">imagen previa</string>
+    <string name="nombre_imagen">nombre_imagen</string>
 </resources>

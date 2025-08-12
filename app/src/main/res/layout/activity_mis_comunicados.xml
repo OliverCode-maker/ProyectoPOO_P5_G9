@@ -26,18 +26,27 @@
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_black"
+            android:padding="15dp"
             android:text="Tablero Comunicados"
+            android:textColor="@color/azul_primario"
             android:textAlignment="center"
-            android:textStyle="bold" />
+            android:textSize="25sp"
+   />
 
         <Button
             android:id="@+id/btnOrdenPorTitutlo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="ordenar"
-            android:text="Ordenar por Título" />
+            android:text="Ordenar por Título"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/rosa_primario"
+            android:padding="14dp"
+            android:fontFamily="@font/montserrat_bold"/>
 
         <LinearLayout
+            android:layout_marginTop="14dp"
             android:layout_width="match_parent"
             android:layout_height="194dp"
             android:orientation="vertical"></LinearLayout>
@@ -47,13 +56,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="serializarComunicado"
-            android:text="Guadar" />
+            android:text="Guadar"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/rosa_primario"
+            android:padding="14dp"
+            android:fontFamily="@font/montserrat_bold"/>
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="volver"
-            android:text="Cancelar" />
+            android:text="Cancelar"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/rosa_primario"
+            android:padding="14dp"
+            android:fontFamily="@font/montserrat_bold"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

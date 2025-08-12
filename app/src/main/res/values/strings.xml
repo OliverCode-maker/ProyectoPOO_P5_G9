@@ -7,5 +7,48 @@
     <string name="opciones">Opciones</string>
     <string name="imagen_comunicado">Opciones</string>
     <string name="volver">Volver</string>
+    <string-array name="opcioes_area">
+        <item>
+            Click para ver Areas
+        </item>
+        <item>
+            Academico
+        </item>
+        <item>
+            Educativo
+        </item>
+        <item>
+            Investigacion
+        </item>
+        <item>
+            Vinculacion
+        </item>
+        <item>
+            Capacitacion
+        </item>
+        <item>
+            Deportes
+        </item>
+        <item>
+            Cultura
+        </item>
+        <item>
+            Servicios/Productos
+        </item>
+    </string-array>
 
+    <string-array name="nivel_urgencia">
+        <item>
+            Click para ver Niveles de Urgencia
+        </item>
+        <item>
+            Bajo
+        </item>
+        <item>
+            Medio
+        </item>
+        <item>
+            Alto
+        </item>
+    </string-array>
 </resources>

@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -63,6 +64,9 @@ public class PublComunicadosActivity extends AppCompatActivity {
     private ImageView vistaImagen;
     private static final int PICK_IMAGE = 100;
     private String savedImagePath;
+    private LinearLayout layoutUrgencia;
+    private LinearLayout layoutLugar;
+    private LinearLayout layoutFecha;
 
 
     @Override
@@ -94,6 +98,10 @@ public class PublComunicadosActivity extends AppCompatActivity {
         chkEst = findViewById(R.id.chEstudiantes);
         chkPrf = findViewById(R.id.Profesores);
         chkAdm = findViewById(R.id.chAdministrativo);
+
+        layoutFecha = findViewById(R.id.layoutFecha);
+        layoutLugar = findViewById(R.id.layoutLugar);
+        layoutUrgencia = findViewById(R.id.layoutUrgencia);
 
         btnImg = findViewById(R.id.btnCargarImagen);
         btnPublicar = findViewById(R.id.btnPubl);
@@ -393,20 +401,26 @@ public class PublComunicadosActivity extends AppCompatActivity {
         // Oculta todos los campos primero
         textLugar.setVisibility(View.GONE);
         editLugar.setVisibility(View.GONE);
+        layoutLugar.setVisibility(View.GONE);
         textFecha.setVisibility(View.GONE);
         editFecha.setVisibility(View.GONE);
+        layoutFecha.setVisibility(View.GONE);
         textUrgencia.setVisibility(View.GONE);
         spUrgencia.setVisibility(View.GONE);
+        layoutLugar.setVisibility(View.GONE);
 
         // Muestra solo los necesarios según la posición
         switch (posicion) {
             case 0:
+                layoutUrgencia.setVisibility(View.VISIBLE);
                 textUrgencia.setVisibility(View.VISIBLE);
                 spUrgencia.setVisibility(View.VISIBLE);
                 break;
             case 1:
+                layoutLugar.setVisibility(View.VISIBLE);
                 textLugar.setVisibility(View.VISIBLE);
                 editLugar.setVisibility(View.VISIBLE);
+                layoutFecha.setVisibility(View.VISIBLE);
                 textFecha.setVisibility(View.VISIBLE);
                 editFecha.setVisibility(View.VISIBLE);
                 break;

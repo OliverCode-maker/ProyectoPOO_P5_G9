@@ -64,9 +64,11 @@ public class PublComunicadosActivity extends AppCompatActivity {
     private ImageView vistaImagen;
     private static final int PICK_IMAGE = 100;
     private String savedImagePath;
+
     private LinearLayout layoutUrgencia;
     private LinearLayout layoutLugar;
     private LinearLayout layoutFecha;
+
 
 
     @Override
@@ -99,9 +101,11 @@ public class PublComunicadosActivity extends AppCompatActivity {
         chkPrf = findViewById(R.id.Profesores);
         chkAdm = findViewById(R.id.chAdministrativo);
 
+
         layoutFecha = findViewById(R.id.layoutFecha);
         layoutLugar = findViewById(R.id.layoutLugar);
         layoutUrgencia = findViewById(R.id.layoutUrgencia);
+
 
         btnImg = findViewById(R.id.btnCargarImagen);
         btnPublicar = findViewById(R.id.btnPubl);
@@ -224,6 +228,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
         // Generar ID único
         int nuevoId = obtenerSiguienteId();
 
+
         // Crear línea para guardar según el tipo
         String lineaComunicado = "";
         if (tipo.equals("anuncio")) {
@@ -297,6 +302,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
             }
 
             return true;
+
 
         } catch (DatosIncompletosException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -401,6 +407,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
         // Oculta todos los campos primero
         textLugar.setVisibility(View.GONE);
         editLugar.setVisibility(View.GONE);
+
         layoutLugar.setVisibility(View.GONE);
         textFecha.setVisibility(View.GONE);
         editFecha.setVisibility(View.GONE);
@@ -409,9 +416,11 @@ public class PublComunicadosActivity extends AppCompatActivity {
         spUrgencia.setVisibility(View.GONE);
         layoutLugar.setVisibility(View.GONE);
 
+
         // Muestra solo los necesarios según la posición
         switch (posicion) {
             case 0:
+
                 layoutUrgencia.setVisibility(View.VISIBLE);
                 textUrgencia.setVisibility(View.VISIBLE);
                 spUrgencia.setVisibility(View.VISIBLE);
@@ -421,6 +430,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
                 textLugar.setVisibility(View.VISIBLE);
                 editLugar.setVisibility(View.VISIBLE);
                 layoutFecha.setVisibility(View.VISIBLE);
+
                 textFecha.setVisibility(View.VISIBLE);
                 editFecha.setVisibility(View.VISIBLE);
                 break;

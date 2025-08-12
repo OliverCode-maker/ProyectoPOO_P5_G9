@@ -29,6 +29,9 @@ protected void onCreate(Bundle savedInstanceState) {
     String username = getIntent().getStringExtra(MainActivity.KEY_USERNAME);
     // Lee el valor "username" que pusiste en el Intent al abrir esta Activity desde el login
     TextView txtSaludo = findViewById(R.id.txtSaludo);
+    btnMisCom = findViewById(R.id.btnMisComunicados);
+    btnPubCom = findViewById(R.id.btnPublicarCom);
+    btnVerCom = findViewById(R.id.btnMisComunicados);
     // Busca en el layout el TextView con id txtSaludo y lo guarda en la variable txtSaludo
     txtSaludo.setText(getString(R.string.saludo, username));
 

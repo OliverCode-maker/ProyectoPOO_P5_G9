@@ -34,8 +34,20 @@
             android:textSize="25sp"
    />
 
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="280dp">
+
+            <LinearLayout
+                android:id="@+id/scrollLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
         <Button
-            android:id="@+id/btnOrdenPorTitutlo"
+            android:id="@+id/btnOrdenPorTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="ordenar"
@@ -45,22 +57,16 @@
             android:padding="14dp"
             android:fontFamily="@font/montserrat_bold"/>
 
-        <LinearLayout
-            android:layout_marginTop="14dp"
-            android:layout_width="match_parent"
-            android:layout_height="194dp"
-            android:orientation="vertical"></LinearLayout>
-
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="serializarComunicado"
-            android:text="Guadar"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/rosa_primario"
+            android:fontFamily="@font/montserrat_bold"
+            android:onClick="serializarComunicado"
             android:padding="14dp"
-            android:fontFamily="@font/montserrat_bold"/>
+            android:text="Guardar" />
 
         <Button
             android:id="@+id/btnCancel"

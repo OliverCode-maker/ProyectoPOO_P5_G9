@@ -2,7 +2,7 @@ package Modelo;
 
 import java.io.Serializable;
 
-public abstract class Comunicado implements Serializable {
+public abstract class Comunicado implements Serializable, Comparable<Comunicado> {
     private int idComunicado;
     private String tipo;
     private String area;
@@ -23,6 +23,11 @@ public abstract class Comunicado implements Serializable {
         this.nombreArchivoImg = nombreArchivoImg;
 
         cont++;
+    }
+
+    @Override
+    public int compareTo(Comunicado otro) {
+        return this.titulo.compareTo(otro.getTitulo());
     }
 
     public int getIdComunicado() {

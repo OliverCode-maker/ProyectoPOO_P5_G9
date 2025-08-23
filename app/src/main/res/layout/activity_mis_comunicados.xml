@@ -37,13 +37,17 @@
         <ScrollView
             android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="280dp">
+            android:layout_height="280dp"
+            
+            >
 
-            <LinearLayout
-                android:id="@+id/scrollLayout"
+            <TableLayout
+                android:id="@+id/tablaMisComunicados"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:stretchColumns="*"
+                android:shrinkColumns="*"
+            android:padding="8dp"/>
         </ScrollView>
 
         <Button

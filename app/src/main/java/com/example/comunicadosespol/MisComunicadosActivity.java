@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
 import android.widget.TableLayout;
 import android.widget.TableRow;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,13 +28,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 import Modelo.Anuncio;
 import Modelo.Comunicado;
 import Modelo.Evento;
 
 public class MisComunicadosActivity extends AppCompatActivity {
     private Button btnOrdenar;
+
     private TableLayout misComLayout;
+
     private Button btnGuardar;
     private Button btnCancelar;
 
@@ -52,6 +58,7 @@ public class MisComunicadosActivity extends AppCompatActivity {
         btnOrdenar = findViewById(R.id.btnOrdenPorTitulo);
         btnCancelar = findViewById(R.id.btnCancel);
         btnGuardar = findViewById(R.id.btnSave);
+
         misComLayout = findViewById(R.id.tablaMisComunicados);
 
         Thread cargarComunicadosThread = new Thread(new Runnable() {
@@ -67,11 +74,13 @@ public class MisComunicadosActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         agregarComunicadosAlLayout(comunicados);
     }
 
     public void cargarComunicados() {
         comunicados.clear();
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(openFileInput("comunicados.txt")))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -138,6 +147,7 @@ public class MisComunicadosActivity extends AppCompatActivity {
             misComLayout.addView(row);
         }
     }
+
     public void ordenar(View view) {
         comunicados.sort(Comunicado::compareTo);
         agregarComunicadosAlLayout(comunicados);
@@ -148,6 +158,7 @@ public class MisComunicadosActivity extends AppCompatActivity {
         String fileName = "comunicados_al_" + new SimpleDateFormat("dd_MM_yyyy").format(new Date()) + ".dat";
         try (ObjectOutputStream oos = new ObjectOutputStream(openFileOutput(fileName, MODE_PRIVATE))) {
             oos.writeObject(comunicados);
+
             Toast.makeText(this, "Lista serializada en " + fileName, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(this, "Error al serializar: " + e.getMessage(), Toast.LENGTH_SHORT).show();

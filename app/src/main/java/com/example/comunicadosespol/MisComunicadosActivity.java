@@ -81,7 +81,7 @@ public class MisComunicadosActivity extends AppCompatActivity {
     public void cargarComunicados() {
         comunicados.clear();
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(openFileInput("comunicados.txt")))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("comunicados.txt")))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");

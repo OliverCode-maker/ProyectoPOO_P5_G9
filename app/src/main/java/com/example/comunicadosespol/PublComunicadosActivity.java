@@ -129,7 +129,12 @@ public class PublComunicadosActivity extends AppCompatActivity {
                 DatePickerDialog datePicker= new DatePickerDialog(PublComunicadosActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int anio, int mes, int diaDelmes) {
-                        String fechaSelec= anio+"-"+(mes+1)+"-"+diaDelmes;
+                        String fechaSelec;
+                        if(mes+1<10){
+                            fechaSelec= diaDelmes+"/0"+(mes+1)+"/"+anio;
+                        }else{
+                            fechaSelec= diaDelmes+"/"+(mes+1)+"/"+anio;
+                        }
                         editFecha.setText(fechaSelec);
                     }
                 },year,month,day);

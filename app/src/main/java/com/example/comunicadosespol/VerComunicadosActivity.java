@@ -73,7 +73,13 @@ public class VerComunicadosActivity extends AppCompatActivity {
                 DatePickerDialog datePicker= new DatePickerDialog(VerComunicadosActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int anio, int mes, int diaDelmes) {
-                        String fechaSeleccionada= anio+"-"+(mes+1)+"-"+diaDelmes;
+                        String fechaSeleccionada;
+                        if(mes+1<10){
+                            fechaSeleccionada= diaDelmes+"/0"+(mes+1)+"/"+anio;
+                        }else{
+                            fechaSeleccionada= diaDelmes+"/"+(mes+1)+"/"+anio;
+                        }
+
                         fechaFiltro.setText(fechaSeleccionada);
                     }
                 },year,month,day);

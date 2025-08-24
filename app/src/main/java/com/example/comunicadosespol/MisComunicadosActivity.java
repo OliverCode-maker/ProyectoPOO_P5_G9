@@ -33,7 +33,9 @@ import Modelo.Anuncio;
 import Modelo.Comunicado;
 import Modelo.Evento;
 
+
 public class MisComunicadosActivity extends AppCompatActivity {
+
     private Button btnOrdenar;
 
     private TableLayout misComLayout;
@@ -41,6 +43,7 @@ public class MisComunicadosActivity extends AppCompatActivity {
     private Button btnGuardar;
     private Button btnCancelar;
 
+    private String userID;
     //static arralist de comunicados
     private static ArrayList<Comunicado> comunicados = new ArrayList<>();
 
@@ -55,6 +58,8 @@ public class MisComunicadosActivity extends AppCompatActivity {
             return insets;
         });
 
+
+        userID = getIntent().getStringExtra(MainActivity.KEY_USER_ID);
         btnOrdenar = findViewById(R.id.btnOrdenPorTitulo);
         btnCancelar = findViewById(R.id.btnCancel);
         btnGuardar = findViewById(R.id.btnSave);
@@ -75,28 +80,35 @@ public class MisComunicadosActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        agregarComunicadosAlLayout(comunicados);
+        if (comunicados != null){
+            agregarComunicadosAlLayout(comunicados);
+        }else{
+            Toast.makeText(this, "No hay comunicados para mostrar", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void cargarComunicados() {
         comunicados.clear();
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("comunicados.txt")))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(openFileInput("comunicados.txt")))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split("\\|");
                 if (parts.length >= 8) {
                     if ("Anuncio".equalsIgnoreCase(parts[1])) {
-                        comunicados.add(new Anuncio(parts[1], parts[2], parts[3],
-                                parts[4], parts[5], parts[6], parts[7]));
-                    } else if ("Evento".equalsIgnoreCase(parts[1]) && parts.length == 9) {
-                        comunicados.add(new Evento(parts[1], parts[2], parts[3], parts[4],
-                                parts[5], parts[6], parts[7], parts[8]));
+                        if (parts[8].equalsIgnoreCase(userID)) {
+                            comunicados.add(new Anuncio(parts[1], parts[2], parts[3],
+                                    parts[4], parts[5], parts[6], parts[7]));
+                        }
+                    } else if ("Evento".equalsIgnoreCase(parts[1]) && parts.length == 10) {
+                        if (parts[9].equalsIgnoreCase(userID)) {
+                            comunicados.add(new Evento(parts[1], parts[2], parts[3], parts[4],
+                                    parts[5], parts[6], parts[7], parts[8]));
+                        }
                     }
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Error al cargar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            System.out.println("Ha ocurrido un error");;
         }
     }
 
@@ -147,7 +159,6 @@ public class MisComunicadosActivity extends AppCompatActivity {
             misComLayout.addView(row);
         }
     }
-
     public void ordenar(View view) {
         comunicados.sort(Comunicado::compareTo);
         agregarComunicadosAlLayout(comunicados);
@@ -158,7 +169,6 @@ public class MisComunicadosActivity extends AppCompatActivity {
         String fileName = "comunicados_al_" + new SimpleDateFormat("dd_MM_yyyy").format(new Date()) + ".dat";
         try (ObjectOutputStream oos = new ObjectOutputStream(openFileOutput(fileName, MODE_PRIVATE))) {
             oos.writeObject(comunicados);
-
             Toast.makeText(this, "Lista serializada en " + fileName, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(this, "Error al serializar: " + e.getMessage(), Toast.LENGTH_SHORT).show();

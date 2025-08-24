@@ -71,6 +71,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
     private LinearLayout layoutLugar;
     private LinearLayout layoutFecha;
 
+    private String userID;
 
 
     @Override
@@ -84,6 +85,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
             return insets;
         });
 
+        userID = getIntent().getStringExtra(MainActivity.KEY_USER_ID);
         // Inicializar todos los campos
         textLugar = findViewById(R.id.textLugar);
         editLugar = findViewById(R.id.editTextLugar);
@@ -252,13 +254,13 @@ public class PublComunicadosActivity extends AppCompatActivity {
         String lineaComunicado = "";
         if (tipo.equals("anuncio")) {
             String urgencia = spUrgencia.getSelectedItem().toString();
-            lineaComunicado = nuevoId + "," + tipo + "," + area + "," + titulo + "," +
-                            audiencia + "," + descripcion + "," + nombreImagen + "," + urgencia;
+            lineaComunicado = nuevoId + "|" + tipo + "|" + area + "|" + titulo + "|" +
+                            audiencia + "|" + descripcion + "|" + nombreImagen + "|" + urgencia + "|" + userID;
         } else if (tipo.equals("evento")) {
             String lugar = editLugar.getText().toString().trim();
             String fecha = editFecha.getText().toString().trim();
-            lineaComunicado = nuevoId + "," + tipo + "," + area + "," + titulo + "," +
-                            audiencia + "," + descripcion + "," + nombreImagen + "," + lugar + "," + fecha;
+            lineaComunicado = nuevoId + "|" + tipo + "|" + area + "|" + titulo + "|" +
+                            audiencia + "|" + descripcion + "|" + nombreImagen + "|" +lugar + "|" + fecha + "|" + userID;
 
         }
         // Guardar en comunicados.txt
@@ -393,7 +395,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
                 String[] lineas = contenido.split("\n");
                 for (String linea : lineas) {
                     if (!linea.trim().isEmpty()) {
-                        String[] partes = linea.split(",");
+                        String[] partes = linea.split("\\|");
                         if (partes.length > 0) {
                             try {
                                 int id = Integer.parseInt(partes[0]);

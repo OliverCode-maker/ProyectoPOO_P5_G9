@@ -199,7 +199,7 @@ public class VerComunicadosActivity extends AppCompatActivity {
 
     // Crea instancias de Anuncio o Evento según el tipo
     private Comunicado crearComunicado(String linea) {
-        String[] partes = linea.split(",");
+        String[] partes = linea.split("\\|");
 
         // Formato esperado: id,tipo,area,titulo,audiencia,descripcion,imagen,campo_extra[,campo_extra2]
         if (partes.length < 7) return null;

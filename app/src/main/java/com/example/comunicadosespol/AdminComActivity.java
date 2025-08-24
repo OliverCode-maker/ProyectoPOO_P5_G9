@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ public class AdminComActivity extends AppCompatActivity {
 private Button btnVerCom;
 private Button btnPubCom;
 private Button btnMisCom;
+private String userID;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -27,6 +29,8 @@ protected void onCreate(Bundle savedInstanceState) {
         return insets;
     });
     String username = getIntent().getStringExtra(MainActivity.KEY_USERNAME);
+    userID = getIntent().getStringExtra(MainActivity.KEY_USER_ID);
+
     // Lee el valor "username" que pusiste en el Intent al abrir esta Activity desde el login
     TextView txtSaludo = findViewById(R.id.txtSaludo);
     btnMisCom = findViewById(R.id.btnMisComunicados);
@@ -42,10 +46,12 @@ public void verCom(View view){
 }
 public void publCom(View view){
     Intent intent= new Intent(AdminComActivity.this, PublComunicadosActivity.class);
+    intent.putExtra(MainActivity.KEY_USER_ID, userID);
     startActivity(intent);
 }
 public void miCom(View view){
     Intent intent= new Intent(AdminComActivity.this, MisComunicadosActivity.class);
+    intent.putExtra(MainActivity.KEY_USER_ID, userID);
     startActivity(intent);
 }
 }

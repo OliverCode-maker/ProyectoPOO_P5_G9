@@ -1,1 +1,1 @@
-1,evento,Académico,Charla en Github,Estudiante;Profesores,Conferencia sobre github,github_icon.png,Virtual,2025/11/15
+1|evento|Académico|Charla en Github|Estudiante;Profesores|Conferencia sobre github|github_icon.png|Virtual|2025/11/15

@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
 import android.widget.TableLayout;
 import android.widget.TableRow;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,13 +28,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 import Modelo.Anuncio;
 import Modelo.Comunicado;
 import Modelo.Evento;
 
-public class    MisComunicadosActivity extends AppCompatActivity {
+
+public class MisComunicadosActivity extends AppCompatActivity {
+
     private Button btnOrdenar;
+
     private TableLayout misComLayout;
+
     private Button btnGuardar;
     private Button btnCancelar;
 
@@ -50,10 +58,12 @@ public class    MisComunicadosActivity extends AppCompatActivity {
             return insets;
         });
 
+
         userID = getIntent().getStringExtra(MainActivity.KEY_USER_ID);
         btnOrdenar = findViewById(R.id.btnOrdenPorTitulo);
         btnCancelar = findViewById(R.id.btnCancel);
         btnGuardar = findViewById(R.id.btnSave);
+
         misComLayout = findViewById(R.id.tablaMisComunicados);
 
         Thread cargarComunicadosThread = new Thread(new Runnable() {

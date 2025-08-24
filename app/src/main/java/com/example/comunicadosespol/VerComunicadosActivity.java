@@ -1,10 +1,12 @@
 package com.example.comunicadosespol;
 
 
+import android.app.DatePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,7 +61,25 @@ public class VerComunicadosActivity extends AppCompatActivity {
         filtroButton = findViewById(R.id.filtroButton);
         cargarComunicados("comunicados.txt");
 
+        //Configurar el DatePicker
+        fechaFiltro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar= Calendar.getInstance();
+                int year= calendar.get(Calendar.YEAR);
+                int month= calendar.get(Calendar.MONTH);
+                int day= calendar.get(Calendar.DAY_OF_MONTH);
 
+                DatePickerDialog datePicker= new DatePickerDialog(VerComunicadosActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int anio, int mes, int diaDelmes) {
+                        String fechaSeleccionada= anio+"-"+(mes+1)+"-"+diaDelmes;
+                        fechaFiltro.setText(fechaSeleccionada);
+                    }
+                },year,month,day);
+                datePicker.show();
+            }
+        });
     }
 
     public void onClickFiltrar(View view) {

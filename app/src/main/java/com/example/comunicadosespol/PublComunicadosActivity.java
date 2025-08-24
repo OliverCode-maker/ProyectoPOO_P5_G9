@@ -1,5 +1,6 @@
 package com.example.comunicadosespol;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -71,6 +73,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
 
     private String userID;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +117,25 @@ public class PublComunicadosActivity extends AppCompatActivity {
         btnCancelar = findViewById(R.id.btnAtras);
         btnImg.setOnClickListener(v -> openGallery());
 
+        //Configurar el DatePicker
+        editFecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar= Calendar.getInstance();
+                int year= calendar.get(Calendar.YEAR);
+                int month= calendar.get(Calendar.MONTH);
+                int day= calendar.get(Calendar.DAY_OF_MONTH);
 
+                DatePickerDialog datePicker= new DatePickerDialog(PublComunicadosActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int anio, int mes, int diaDelmes) {
+                        String fechaSelec= anio+"-"+(mes+1)+"-"+diaDelmes;
+                        editFecha.setText(fechaSelec);
+                    }
+                },year,month,day);
+                datePicker.show();
+            }
+        });
 
         rtipos.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -132,7 +153,6 @@ public class PublComunicadosActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
     }

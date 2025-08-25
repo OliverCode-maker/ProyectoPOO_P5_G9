@@ -1,14 +1,9 @@
 package com.example.comunicadosespol;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-
 import android.widget.TableLayout;
 import android.widget.TableRow;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
@@ -29,25 +21,33 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 import Modelo.Anuncio;
 import Modelo.Comunicado;
 import Modelo.Evento;
 
-
+/**
+ * Pantalla que lista los comunicados pertenecientes al usuario autenticado.
+ * <p>Lee un archivo interno plano y muestra los datos en una tabla.</p>
+ */
 public class MisComunicadosActivity extends AppCompatActivity {
 
+    /** Botón para ordenar por título. */
     private Button btnOrdenar;
-
+    /** Tabla que contiene los comunicados. */
     private TableLayout misComLayout;
-
+    /** Botón para serializar la lista. */
     private Button btnGuardar;
+    /** Botón para volver/cancelar. */
     private Button btnCancelar;
-
+    /** Identificador del usuario dueño de los comunicados (en texto). */
     private String userID;
-    //static arralist de comunicados
+
+    /** Lista en memoria de comunicados del usuario. */
     private static ArrayList<Comunicado> comunicados = new ArrayList<>();
 
+    /**
+     * Ciclo de vida: crea la UI, carga los comunicados del usuario y los pinta.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,21 +59,19 @@ public class MisComunicadosActivity extends AppCompatActivity {
             return insets;
         });
 
-
         userID = getIntent().getStringExtra(MainActivity.KEY_USER_ID);
         btnOrdenar = findViewById(R.id.btnOrdenPorTitulo);
         btnCancelar = findViewById(R.id.btnCancel);
         btnGuardar = findViewById(R.id.btnSave);
-
         misComLayout = findViewById(R.id.tablaMisComunicados);
 
+        // Carga síncrona (en el hilo principal) usando un Thread + join()
         Thread cargarComunicadosThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 cargarComunicados();
             }
         });
-
         cargarComunicadosThread.start();
         try {
             cargarComunicadosThread.join();
@@ -88,6 +86,16 @@ public class MisComunicadosActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Lee el archivo interno {@code comunicados.txt}, filtra por {@code userID}
+     * y construye objetos {@link Anuncio} o {@link Evento}.
+     *
+     * <p>Formato esperado:
+     * <ul>
+     *   <li>Anuncio: id|Anuncio|area|titulo|audiencia|descripcion|img|urgencia|userId</li>
+     *   <li>Evento:  id|Evento |area|titulo|audiencia|descripcion|img|lugar|fecha|userId</li>
+     * </ul></p>
+     */
     public void cargarComunicados() {
         comunicados.clear();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(openFileInput("comunicados.txt")))) {
@@ -109,18 +117,19 @@ public class MisComunicadosActivity extends AppCompatActivity {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Ha ocurrido un error");;
+            System.out.println("Ha ocurrido un error");
         }
     }
 
-
-
+    /**
+     * Crea las filas de la tabla a partir de la lista de comunicados.
+     * @param comunicados lista a mostrar
+     */
     public void agregarComunicadosAlLayout(ArrayList<Comunicado> comunicados) {
         misComLayout.removeAllViews();
 
-        // Crear encabezado
+        // Encabezado
         TableRow headerRow = new TableRow(this);
-
         TextView headerTitulo = new TextView(this);
         headerTitulo.setText("Título");
         headerTitulo.setTextAppearance(this, R.style.TablaHeader);
@@ -129,7 +138,6 @@ public class MisComunicadosActivity extends AppCompatActivity {
         headerFecha.setText("Fecha");
         headerFecha.setTextAppearance(this, R.style.TablaHeader);
 
-        // Layout params para que se expandan igual
         TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
         headerTitulo.setLayoutParams(params);
         headerFecha.setLayoutParams(params);
@@ -138,7 +146,7 @@ public class MisComunicadosActivity extends AppCompatActivity {
         headerRow.addView(headerFecha);
         misComLayout.addView(headerRow);
 
-        // Agregar comunicados
+        // Filas de datos
         for (Comunicado comunicado : comunicados) {
             TableRow row = new TableRow(this);
 
@@ -151,7 +159,6 @@ public class MisComunicadosActivity extends AppCompatActivity {
             fechaCell.setText(fecha);
             fechaCell.setTextAppearance(this, R.style.TablaCelda);
 
-            // Mismo layout params
             tituloCell.setLayoutParams(params);
             fechaCell.setLayoutParams(params);
 
@@ -160,13 +167,21 @@ public class MisComunicadosActivity extends AppCompatActivity {
             misComLayout.addView(row);
         }
     }
-    public void ordenar(View view) {
+
+    /**
+     * Ordena la lista por el orden natural ({@link Comunicado#compareTo(Comunicado)})
+     * y vuelve a pintar la tabla.
+     */
+    public void ordenar(android.view.View view) {
         comunicados.sort(Comunicado::compareTo);
         agregarComunicadosAlLayout(comunicados);
     }
 
-    // Simplificar la serialización
-    public void serializarComunicado(View view) {
+    /**
+     * Serializa la lista a un archivo con fecha en el nombre.
+     * <p>Nombre: {@code comunicados_al_dd_MM_yyyy.dat}</p>
+     */
+    public void serializarComunicado(android.view.View view) {
         String fileName = "comunicados_al_" + new SimpleDateFormat("dd_MM_yyyy").format(new Date()) + ".dat";
         try (ObjectOutputStream oos = new ObjectOutputStream(openFileOutput(fileName, MODE_PRIVATE))) {
             oos.writeObject(comunicados);
@@ -176,7 +191,10 @@ public class MisComunicadosActivity extends AppCompatActivity {
         }
     }
 
-    public void volver(View view) {
+    /**
+     * Cierra la Activity y vuelve a la anterior.
+     */
+    public void volver(android.view.View view) {
         finish();
     }
 }

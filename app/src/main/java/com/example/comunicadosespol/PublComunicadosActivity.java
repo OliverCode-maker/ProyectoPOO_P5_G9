@@ -2,193 +2,94 @@ package com.example.comunicadosespol;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
+import android.provider.MediaStore;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-<<<<<<< HEAD
-import java.io.File;
-=======
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
->>>>>>> origin/master
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-<<<<<<< HEAD
-import java.util.Calendar;
-import java.util.Locale;
-
-import Modelo.DatosIncompletosException;
-import Modelo.TipoComunicado;
-=======
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import Modelo.DatosIncompletosException;
->>>>>>> origin/master
 
+/**
+ * Pantalla para publicar nuevos comunicados (Anuncio o Evento).
+ * <p>Gestiona carga de imagen, validaciones y persistencia en archivo plano.</p>
+ */
 public class PublComunicadosActivity extends AppCompatActivity {
-    // === NUEVO: nombre del archivo que usaremos en almacenamiento interno ===
-    private static final String NOMBRE_COMUNICADOS = "comunicados.txt";
 
-    // --- Controles principales ---
+    // --- Controles de UI ---
     private RadioGroup rtipos;
-    private RadioButton rbAnuncio, rbEvento;
-    private Spinner spArea, spUrgencia;
+    private Spinner spArea;
     private CheckBox chkEst, chkPrf, chkAdm;
     private EditText editTitle, editDesc;
-
-<<<<<<< HEAD
-    // --- Campos específicos + comunes ---
-    private LinearLayout boxEvento, boxAnuncio;
-    private EditText editLugar, editFecha, editImgName; // fecha es común; imgname visible
     private Button btnImg, btnPublicar, btnCancelar;
-    private ActivityResultLauncher<Intent> imagePickerLauncher;
-    private ImageView vistaImagen;
     private Uri imageUri;
-=======
-    private TextView textLugar;
-    private EditText editLugar;
-    private TextView textFecha;
-    private EditText editFecha;
-    private TextView textUrgencia;
+
+    // Campos específicos por tipo
+    private TextView textLugar, textFecha, textUrgencia;
+    private EditText editLugar, editFecha;
     private Spinner spUrgencia;
     private ImageView vistaImagen;
+
     private static final int PICK_IMAGE = 100;
     private String savedImagePath;
 
-    private LinearLayout layoutUrgencia;
-    private LinearLayout layoutLugar;
-    private LinearLayout layoutFecha;
+    private LinearLayout layoutUrgencia, layoutLugar, layoutFecha;
 
+    /** Identificador del usuario que publica (como String en este flujo). */
     private String userID;
 
->>>>>>> origin/master
-
+    /**
+     * Ciclo de vida: inicializa la UI, configura listeners y date picker.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_publ_comunicados);
-
-        // === NUEVO: asegurar archivo en almacenamiento interno en el primer arranque ===
-        asegurarComunicadosEnInterno();
-
-        // Ajuste de márgenes
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-<<<<<<< HEAD
-        // --- FindViews ---
-        rtipos = findViewById(R.id.rdTipo);
-        rbAnuncio = findViewById(R.id.rbAnuncio);
-        rbEvento  = findViewById(R.id.rbEvento);
-
-        spArea   = findViewById(R.id.spArea);
-        spUrgencia = findViewById(R.id.spUrgencia);
-
-        chkEst = findViewById(R.id.chkEst);
-        chkPrf = findViewById(R.id.chkPrf);
-        chkAdm = findViewById(R.id.chkAdm);
-
-        editTitle = findViewById(R.id.editTitle);
-        editDesc  = findViewById(R.id.editDesc);
-
-        boxEvento  = findViewById(R.id.boxEvento);
-        boxAnuncio = findViewById(R.id.boxAnuncio);
-        editLugar  = findViewById(R.id.editLugar);
-        editFecha  = findViewById(R.id.editFecha);     // común (para ambos)
-        editImgName = findViewById(R.id.editImgName);  // solo lectura en el XML
-
-        btnImg = findViewById(R.id.btnCargarImagen);
-        btnPublicar = findViewById(R.id.btnPubl);
-        btnCancelar = findViewById(R.id.btnCancelar);
-        vistaImagen = findViewById(R.id.imgPreview);
-
-        // --- Lanzador para abrir galería y recibir imagen ---
-        imagePickerLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                        Uri originalUri = result.getData().getData();
-                        try {
-                            File copiado = copiarImagenAUbicacionApp(originalUri);
-                            imageUri = Uri.fromFile(copiado);      // Uri propia en internal storage
-                            vistaImagen.setImageURI(imageUri);      // previsualiza
-                            // Mostrar nombre con extensión en el campo visible:
-                            String base = nombreBase(originalUri);
-                            editImgName.setText(base + ".jpg");
-                        } catch (IOException e) {
-                            Toast.makeText(this, "Error al copiar imagen", Toast.LENGTH_SHORT).show();
-                        }
-=======
         userID = getIntent().getStringExtra(MainActivity.KEY_USER_ID);
-        // Inicializar todos los campos
+
+        // Referencias UI
         textLugar = findViewById(R.id.textLugar);
         editLugar = findViewById(R.id.editTextLugar);
-
         textFecha = findViewById(R.id.textFecha);
         editFecha = findViewById(R.id.editTextFecha);
-
         textUrgencia = findViewById(R.id.textUrgencia);
         spUrgencia = findViewById(R.id.spinnerUrgencia);
-
         vistaImagen = findViewById(R.id.imageView);
-
         editTitle = findViewById(R.id.editTextTitulo);
         editDesc = findViewById(R.id.editTextDescripcion);
         spArea = findViewById(R.id.spinArea);
         chkEst = findViewById(R.id.chEstudiantes);
         chkPrf = findViewById(R.id.Profesores);
         chkAdm = findViewById(R.id.chAdministrativo);
-
-
         layoutFecha = findViewById(R.id.layoutFecha);
         layoutLugar = findViewById(R.id.layoutLugar);
         layoutUrgencia = findViewById(R.id.layoutUrgencia);
-
-
         btnImg = findViewById(R.id.btnCargarImagen);
         btnPublicar = findViewById(R.id.btnPubl);
         rtipos = findViewById(R.id.rdTipo);
         btnCancelar = findViewById(R.id.btnAtras);
+
         btnImg.setOnClickListener(v -> openGallery());
 
-        //Configurar el DatePicker
+        // DatePicker para la fecha del evento
         editFecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,93 +114,32 @@ public class PublComunicadosActivity extends AppCompatActivity {
             }
         });
 
+        // Mostrar/ocultar campos según tipo
         rtipos.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // 'checkedId' es el id del RadioButton seleccionado
-                if (checkedId != -1) { // -1 significa que no hay selección
-                    // Buscar el RadioButton por su id
+                if (checkedId != -1) {
                     RadioButton radioSeleccionado = findViewById(checkedId);
                     int posicion = group.indexOfChild(radioSeleccionado);
-
-                    // Ejemplo: si no es la primera opción
                     if (!(posicion < 0 || posicion > 1)) {
                         mostrarCampo(posicion);
->>>>>>> origin/master
                     }
                 }
-        );
-
-        // Click del botón para abrir galería
-        btnImg.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            imagePickerLauncher.launch(intent);
-        });
-
-        // Carga de opciones
-        spArea.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                new String[]{"Académico","Educativo","Investigación","Vinculación","Capacitación","Deportes","Cultura","Servicios/Productos"}));
-
-        spUrgencia.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                new String[]{"Alta","Media","Baja"}));
-
-        // Tipo: mostrar/ocultar cajas (fecha queda SIEMPRE visible/usable)
-        rtipos.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rbEvento) {
-                boxEvento.setVisibility(View.VISIBLE);   // lugar
-                boxAnuncio.setVisibility(View.GONE);     // urgencia oculto
-            } else if (checkedId == R.id.rbAnuncio) {
-                boxEvento.setVisibility(View.GONE);
-                boxAnuncio.setVisibility(View.VISIBLE);
             }
         });
-
-        // Calendario (para ambos tipos)
-        editFecha.setOnClickListener(v -> mostrarDatePicker());
-
-<<<<<<< HEAD
-        // Publicar
-        btnPublicar.setOnClickListener(v -> {
-            try {
-                publicarComunicado();
-                Toast.makeText(this, "Comunicado publicado", Toast.LENGTH_SHORT).show();
-                finish(); // volver al menú anterior
-            } catch (DatosIncompletosException e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                Toast.makeText(this, "Error al guardar: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        // Cancelar / Volver
-        btnCancelar.setOnClickListener(v -> finish());
     }
 
-    // === NUEVO: Copiar 'comunicados.txt' desde assets a /files si no existe ===
-    private void asegurarComunicadosEnInterno() {
-        File destino = new File(getFilesDir(), NOMBRE_COMUNICADOS);
-        if (!destino.exists()) {
-            try (InputStream in = getAssets().open(NOMBRE_COMUNICADOS);
-                 FileOutputStream out = new FileOutputStream(destino)) {
-                byte[] buf = new byte[8192];
-                int n;
-                while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
-            } catch (IOException e) {
-                // Si no existe en assets, crea uno vacío
-                try (FileOutputStream out = new FileOutputStream(destino)) {
-                    // vacío
-                } catch (IOException ignored) {}
-=======
-    }
-
+    /**
+     * Abre la galería del dispositivo para seleccionar una imagen.
+     */
     private void openGallery() {
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
 
+    /**
+     * Recibe el resultado de selección de imagen y la copia al almacenamiento interno.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -313,126 +153,15 @@ public class PublComunicadosActivity extends AppCompatActivity {
                 Toast.makeText(this, "Imagen guardada localmente", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
->>>>>>> origin/master
             }
         }
     }
 
-<<<<<<< HEAD
-    // Copia la imagen seleccionada a /files/images/ con extensión .jpg
-    private File copiarImagenAUbicacionApp(Uri uri) throws IOException {
-        File dir = new File(getFilesDir(), "images");
-        if (!dir.exists()) dir.mkdirs();
-
-        String base = nombreBase(uri);
-        File destino = new File(dir, base + ".jpg");
-
-        try (InputStream in = getContentResolver().openInputStream(uri);
-             OutputStream out = new FileOutputStream(destino)) {
-            byte[] buf = new byte[8192];
-            int n;
-            while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
-        }
-        return destino;
-    }
-
-    // Obtiene nombre base (sin extensión) desde el ContentResolver o la URI
-    private String nombreBase(Uri uri) {
-        String nombre = null;
-        try (Cursor c = getContentResolver().query(uri,
-                new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
-            if (c != null && c.moveToFirst()) nombre = c.getString(0);
-        }
-        if (nombre == null) {
-            String last = uri.getLastPathSegment();
-            nombre = (last != null) ? last : "imagen";
-        }
-        int punto = nombre.lastIndexOf('.');
-        if (punto > 0) nombre = nombre.substring(0, punto);
-        return nombre;
-    }
-
-    // ========= LÓGICA PRINCIPAL =========
-    private void publicarComunicado() throws Exception {
-        // 1) Determinar tipo
-        TipoComunicado tipo;
-        if (rbEvento.isChecked()) {
-            tipo = TipoComunicado.EVENTO;
-        } else if (rbAnuncio.isChecked()) {
-            tipo = TipoComunicado.ANUNCIO;
-        } else {
-            throw new DatosIncompletosException("Seleccione el tipo de comunicado.");
-        }
-
-        // 2) Comunes
-        String area = (String) spArea.getSelectedItem();
-        String titulo = s(editTitle);
-        String audiencia = getAudiencia();
-        String descripcion = s(editDesc);
-        String fecha = s(editFecha); // requerido en ambos
-        String nombreArchivoImagen = (imageUri != null) ? (nombreBase(imageUri) + ".jpg") : null;
-
-        // 3) Validación común
-        if (titulo.isEmpty() || audiencia.isEmpty() || descripcion.isEmpty()
-                || nombreArchivoImagen == null || fecha.isEmpty()) {
-            throw new DatosIncompletosException("No están todos los datos completos.");
-        }
-
-        // 4) Construcción de línea CSV según tipo
-        String id = String.valueOf(System.currentTimeMillis() % 1000000);
-        String lineaCSV;
-
-        switch (tipo) {
-            case EVENTO: {
-                String lugar = s(editLugar);
-                if (lugar.isEmpty()) {
-                    throw new DatosIncompletosException("Faltan datos del evento (lugar).");
-                }
-                // id, tipo, área, título, audiencia, descripción, nombreArchivoImagen, lugar, fecha
-                lineaCSV = String.join(", ",
-                        id, "evento", area, titulo, audiencia, descripcion, nombreArchivoImagen, lugar, fecha);
-                break;
-            }
-            case ANUNCIO: {
-                String urgencia = (String) spUrgencia.getSelectedItem();
-                if (urgencia == null || urgencia.isEmpty()) {
-                    throw new DatosIncompletosException("Falta seleccionar nivel de urgencia.");
-                }
-                // id, tipo, área, título, audiencia, descripción, nombreArchivoImagen, urgencia, fecha
-                lineaCSV = String.join(", ",
-                        id, "anuncio", area, titulo, audiencia, descripcion, nombreArchivoImagen, urgencia, fecha);
-                break;
-            }
-            default:
-                throw new IllegalStateException("Tipo de comunicado no reconocido: " + tipo);
-        }
-
-        // 5) Guardar en comunicado.txt (append)
-        try (FileOutputStream fos = openFileOutput(NOMBRE_COMUNICADOS, MODE_APPEND)) {
-            fos.write((lineaCSV + "\n").getBytes());
-        }
-    }
-
-    private String s(EditText e) { return e.getText().toString().trim(); }
-
-    private String getAudiencia() throws DatosIncompletosException {
-        StringBuilder sb = new StringBuilder();
-        if (chkEst.isChecked()) sb.append("Estudiantes;");
-        if (chkPrf.isChecked()) sb.append("Profesores;");
-        if (chkAdm.isChecked()) sb.append("Administrativo;");
-        if (sb.length() == 0) throw new DatosIncompletosException("Seleccione la audiencia.");
-        sb.setLength(sb.length() - 1); // quitar último ';'
-        return sb.toString();
-    }
-
-    private void mostrarDatePicker() {
-        final Calendar c = Calendar.getInstance();
-        int y = c.get(Calendar.YEAR), m = c.get(Calendar.MONTH), d = c.get(Calendar.DAY_OF_MONTH);
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-            String fecha = String.format(Locale.ROOT, "%02d/%02d/%04d", dayOfMonth, month + 1, year);
-            editFecha.setText(fecha);
-        }, y, m, d).show();
-=======
+    /**
+     * Copia el contenido del URI de la imagen al almacenamiento interno de la app.
+     * @param uri URI devuelto por la galería
+     * @return ruta absoluta del archivo guardado o {@code null} si falla
+     */
     private String saveImageToInternalStorage(Uri uri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -451,6 +180,10 @@ public class PublComunicadosActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Guarda en un archivo interno la ruta de la última imagen cargada.
+     * @param path ruta absoluta de la imagen guardada
+     */
     private void saveImagePathToFile(String path) {
         try {
             FileOutputStream fos = openFileOutput("image_path.txt", MODE_PRIVATE);
@@ -461,8 +194,11 @@ public class PublComunicadosActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Carga la última imagen cuyo path quedó guardado en {@code image_path.txt}.
+     * @param view vista que dispara el evento
+     */
     public void cargarImg(View view){
-        // Cargar la imagen guardada desde almacenamiento interno
         try {
             File file = new File(getFilesDir(), "image_path.txt");
             if (file.exists()) {
@@ -486,13 +222,16 @@ public class PublComunicadosActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Valida los campos, arma la línea y guarda el comunicado en {@code comunicados.txt}.
+     * @param view vista que dispara el evento
+     */
     public void publicarComunicado(View view){
-        // Validar que todos los campos necesarios estén llenos
         if (!validarCampos()) {
             return;
         }
 
-        // Obtener datos comunes
+        // Datos comunes
         String tipo = obtenerTipoSeleccionado();
         String area = spArea.getSelectedItem().toString();
         String titulo = editTitle.getText().toString().trim();
@@ -503,8 +242,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
         // Generar ID único
         int nuevoId = obtenerSiguienteId();
 
-
-        // Crear línea para guardar según el tipo
+        // Crear línea según tipo
         String lineaComunicado = "";
         if (tipo.equals("anuncio")) {
             String urgencia = spUrgencia.getSelectedItem().toString();
@@ -515,9 +253,9 @@ public class PublComunicadosActivity extends AppCompatActivity {
             String fecha = editFecha.getText().toString().trim();
             lineaComunicado = nuevoId + "|" + tipo + "|" + area + "|" + titulo + "|" +
                             audiencia + "|" + descripcion + "|" + nombreImagen + "|" +lugar + "|" + fecha + "|" + userID;
-
         }
-        // Guardar en comunicados.txt
+
+        // Guardar
         if (guardarComunicado(lineaComunicado)) {
             if (savedImagePath != null) {
                 saveImagePathToFile(savedImagePath);
@@ -528,14 +266,17 @@ public class PublComunicadosActivity extends AppCompatActivity {
             Toast.makeText(this, "Error al publicar el comunicado", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * Limpia posibles artefactos de imagen y cierra la Activity sin guardar.
+     * @param view vista que dispara el evento
+     */
     public void cancelar(View view){
-        // Eliminar la imagen guardada si existe
         if (savedImagePath != null) {
             File imgFile = new File(savedImagePath);
             if (imgFile.exists()) {
                 imgFile.delete();
             }
-            // También elimina el archivo de ruta
             File pathFile = new File(getFilesDir(), "image_path.txt");
             if (pathFile.exists()) {
                 pathFile.delete();
@@ -544,6 +285,10 @@ public class PublComunicadosActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Valida los campos del formulario según el tipo de comunicado.
+     * @return {@code true} si pasó todas las validaciones; {@code false} si se detectó algún error
+     */
     private boolean validarCampos() {
         try {
             if (editTitle.getText().toString().trim().isEmpty()) {
@@ -570,14 +315,11 @@ public class PublComunicadosActivity extends AppCompatActivity {
                 if (editFecha.getText().toString().trim().isEmpty()) {
                     throw new DatosIncompletosException("Ingrese la fecha del evento");
                 }
-                // Validar formato y que la fecha sea futura
                 if (!validarFechaEvento(editFecha.getText().toString().trim())) {
                     return false;
                 }
             }
-
             return true;
-
 
         } catch (DatosIncompletosException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -585,15 +327,16 @@ public class PublComunicadosActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Valida que la fecha del evento tenga el formato correcto y que sea posterior a hoy.
+     * @param fechaTexto texto en formato dd/MM/yyyy
+     * @return {@code true} si es válida y futura; {@code false} en caso contrario
+     */
     private boolean validarFechaEvento(String fechaTexto) {
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        formatoFecha.setLenient(false); // No permitir fechas inválidas como 32/13/2024
-
+        formatoFecha.setLenient(false);
         try {
-            // Verificar formato
             Date fechaEvento = formatoFecha.parse(fechaTexto);
-
-            // Obtener fecha actual
             Calendar hoy = Calendar.getInstance();
             hoy.set(Calendar.HOUR_OF_DAY, 0);
             hoy.set(Calendar.MINUTE, 0);
@@ -601,11 +344,9 @@ public class PublComunicadosActivity extends AppCompatActivity {
             hoy.set(Calendar.MILLISECOND, 0);
             Date fechaActual = hoy.getTime();
 
-            // Verificar que la fecha del evento sea posterior a hoy
             if (fechaEvento.before(fechaActual)) {
                 throw new DatosIncompletosException("La fecha del evento debe ser posterior a la fecha actual");
             }
-
             return true;
 
         } catch (ParseException e) {
@@ -621,6 +362,10 @@ public class PublComunicadosActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Devuelve el tipo actualmente seleccionado en el RadioGroup.
+     * @return "anuncio" si es la primera opción, "evento" en caso contrario
+     */
     private String obtenerTipoSeleccionado() {
         int selectedId = rtipos.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectedId);
@@ -628,6 +373,10 @@ public class PublComunicadosActivity extends AppCompatActivity {
         return posicion == 0 ? "anuncio" : "evento";
     }
 
+    /**
+     * Construye la cadena con la audiencia seleccionada.
+     * @return texto separado por punto y coma
+     */
     private String obtenerAudienciaSeleccionada() {
         List<String> audiencias = new ArrayList<>();
         if (chkEst.isChecked()) audiencias.add("Estudiantes");
@@ -636,6 +385,11 @@ public class PublComunicadosActivity extends AppCompatActivity {
         return String.join(";", audiencias);
     }
 
+    /**
+     * Analiza el archivo {@code comunicados.txt} para obtener el mayor id
+     * y devolver el siguiente valor.
+     * @return nuevo id incremental
+     */
     private int obtenerSiguienteId() {
         int maxId = 0;
         try {
@@ -654,9 +408,7 @@ public class PublComunicadosActivity extends AppCompatActivity {
                             try {
                                 int id = Integer.parseInt(partes[0]);
                                 if (id > maxId) maxId = id;
-                            } catch (NumberFormatException e) {
-                                // Ignorar líneas mal formateadas
-                            }
+                            } catch (NumberFormatException ignored) {}
                         }
                     }
                 }
@@ -667,6 +419,11 @@ public class PublComunicadosActivity extends AppCompatActivity {
         return maxId + 1;
     }
 
+    /**
+     * Añade una línea al archivo interno {@code comunicados.txt}.
+     * @param lineaComunicado línea completa con campos separados por {@code |}
+     * @return {@code true} si se pudo escribir; {@code false} si hubo un error de I/O
+     */
     private boolean guardarComunicado(String lineaComunicado) {
         try {
             FileOutputStream fos = openFileOutput("comunicados.txt", MODE_APPEND);
@@ -678,11 +435,14 @@ public class PublComunicadosActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Muestra/oculta campos según el tipo de comunicado.
+     * @param posicion 0 = Anuncio (muestra urgencia), 1 = Evento (muestra lugar y fecha)
+     */
     public void mostrarCampo(int posicion) {
-        // Oculta todos los campos primero
+        // Oculta todos
         textLugar.setVisibility(View.GONE);
         editLugar.setVisibility(View.GONE);
-
         layoutLugar.setVisibility(View.GONE);
         textFecha.setVisibility(View.GONE);
         editFecha.setVisibility(View.GONE);
@@ -691,11 +451,9 @@ public class PublComunicadosActivity extends AppCompatActivity {
         spUrgencia.setVisibility(View.GONE);
         layoutLugar.setVisibility(View.GONE);
 
-
-        // Muestra solo los necesarios según la posición
+        // Muestra según el tipo
         switch (posicion) {
             case 0:
-
                 layoutUrgencia.setVisibility(View.VISIBLE);
                 textUrgencia.setVisibility(View.VISIBLE);
                 spUrgencia.setVisibility(View.VISIBLE);
@@ -705,11 +463,9 @@ public class PublComunicadosActivity extends AppCompatActivity {
                 textLugar.setVisibility(View.VISIBLE);
                 editLugar.setVisibility(View.VISIBLE);
                 layoutFecha.setVisibility(View.VISIBLE);
-
                 textFecha.setVisibility(View.VISIBLE);
                 editFecha.setVisibility(View.VISIBLE);
                 break;
         }
->>>>>>> origin/master
     }
 }

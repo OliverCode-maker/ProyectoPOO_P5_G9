@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private Usuario autenticar(String username, String password) throws CredencialesInvalidasException {
         for (Usuario u : usuarios) {
             if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+                System.out.println(u.getIdUser());
                 return u; // éxito
             }
         }
@@ -71,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 //Para usar username en siguientes vistas
                 intent.putExtra(KEY_USERNAME, u.getUsername());
                 //Para usar id en siguientes vistas
-                intent.putExtra(KEY_USER_ID,  u.getIdUser());
+                intent.putExtra(KEY_USER_ID,  String.valueOf(u.getIdUser()));
+
                 startActivity(intent);
                 finish();
             } catch(CredencialesInvalidasException e){

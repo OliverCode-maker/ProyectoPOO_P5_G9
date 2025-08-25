@@ -2,5 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+<<<<<<< HEAD
     <color name="purple_500">#6200EE</color>
+=======
+    <color name="azul_primario">#5F4EDB</color>
+    <color name="rosa_primario">#E73FBF</color>
+>>>>>>> origin/master
 </resources>

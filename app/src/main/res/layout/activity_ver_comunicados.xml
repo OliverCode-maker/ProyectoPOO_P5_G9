@@ -7,23 +7,32 @@
     android:layout_height="match_parent"
     tools:context=".VerComunicadosActivity">
 
-    <!-- Boton para volver al menu principal -->
+    <!-- Botón para volver al menú principal -->
     <Button
         android:id="@+id/btnVolver"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="@string/volver"
+        android:layout_margin="16dp"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="@color/rosa_primario"
+        android:fontFamily="@font/montserrat_bold"
         android:onClick="volver"
-        app:layout_constraintTop_toTopOf="parent"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="10dp"
+        android:text="@string/volver"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- ScrollView que ocupa el espacio entre el botón y el campo de fecha -->
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/btnVolver"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/filtroDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -33,9 +42,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"></LinearLayout>
+            android:padding="16dp" />
 
     </ScrollView>
 
+    <!-- Campo de fecha pegado al fondo -->
 
+    <EditText
+        android:id="@+id/filtroDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/custom_input_2"
+        android:elevation="4dp"
+        android:ems="10"
+        android:hint="dd/mm/yyyy"
+        android:inputType="date"
+        android:fontFamily="@font/montserrat_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/filtroButton" />
+
+    <Button
+        android:id="@+id/filtroButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/rosa_primario"
+        android:fontFamily="@font/montserrat_medium"
+        android:onClick="onClickFiltrar"
+        android:text="Filtrar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/filtroDate" />
 </androidx.constraintlayout.widget.ConstraintLayout>

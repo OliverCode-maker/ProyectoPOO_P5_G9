@@ -37,7 +37,7 @@
         </item>
     </string-array>
 
-<<<<<<< HEAD
+
     <!-- Títulos y etiquetas para publicarAnuncio -->
     <string name="titulo_nuevo_comunicado">Nuevo Comunicado</string>
     <string name="etiqueta_tipo">Tipo:</string>
@@ -85,7 +85,7 @@
     <string name="msg_error_guardar">Error al guardar</string>
     <string name="imagen_previa">imagen previa</string>
     <string name="nombre_imagen">nombre_imagen</string>
-=======
+
     <string-array name="nivel_urgencia">
         <item>
             Click para ver Niveles de Urgencia
@@ -100,5 +100,5 @@
             Alto
         </item>
     </string-array>
->>>>>>> origin/master
+
 </resources>
